@@ -62,24 +62,31 @@ on Fourniture.num_f=Fournisseur.num_f where code_p is Null
 select nom_f from Fournisseur where ville='Casa'
 
 --f) Numéros des fournisseurs qui fournissent tous les produits originaire de Marrakech
-insert into Fourniture values(2002,'C1001',200)
+insert into Fourniture values(2002,'S4004',200)
+--   Les Etapes
+--   1 - compter combien des produits originaire de marrakech (N_Produit_P)
+--   2 - compter combien des produits originaire de marrakech chaque fournisseur fournisse(N_Produit_F)
+--   2 - comparer (N_Produit_P) et (N_Produit_F)
 
-
-select num_f as ori from Fourniture 
-join Produit on Fourniture.code_p = Produit.code_p 
-group by num_f  having count(distinct origine)=1
-
+select num_f from Fourniture 
+join produit  on Fourniture.code_p=Produit.code_p
+where origine='marrakech'
+group by num_f
+having count(distinct Fourniture.code_p)=(select count(code_p) from Produit where origine ='marrakech')
 
 
 
 --g) Noms et villes des fournisseurs qui  fournissent au moins un produit originaire de leur ville.
-select Fourniture.num_f,ville from Fourniture 
+select distinct nom_f,ville from Fourniture 
 join Produit on Fourniture.code_p=Produit.code_p 
 join Fournisseur on Fournisseur.num_f=Fourniture.num_f
-where origine='marrakech'
+where origine=ville
 
-
-
+--h) Numéros des fournisseurs qui ne fournissent que des produits ayant le prix dépasse 800.
+select distinct nom_f,ville from Fourniture 
+join Produit on Fourniture.code_p=Produit.code_p 
+join Fournisseur on Fournisseur.num_f=Fourniture.num_f
+where prix_u>800
 
 
 
